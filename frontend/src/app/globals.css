@@ -684,61 +684,68 @@ button {
   50% { opacity: 1; transform: scale(1); }
 }
 
-.chat__input-area {
-  padding: 12px 14px;
-  flex-shrink: 0;
-  border-top: 1px solid var(--border-subtle);
-  background: var(--bg-base);
-}
-
-.chat__input-row {
+.chat__input {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--bg-input);
+  border-top: 1px solid var(--border-subtle);
 }
 
-.chat__textarea {
+.chat__input-field {
   flex: 1;
-  padding: 10px 14px;
-  font-size: 12px;
-  border-radius: var(--radius-md);
-  resize: none;
-  min-height: 44px;
-  background: var(--bg-input);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 20px;
   border: 1px solid var(--border-default);
+  background: var(--bg-base);
   color: var(--text-primary);
+  resize: none;
+  min-height: 48px;
+  max-height: 200px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.chat__textarea:focus {
+.chat__input-field:focus {
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 2px var(--accent-primary-dim);
+  box-shadow: 0 0 0 3px var(--accent-primary-dim);
 }
 
-.chat__submit {
-  align-self: flex-end;
-  padding: 10px 18px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  border-radius: var(--radius-md);
+.chat__input-field::placeholder {
+  color: var(--text-faint);
+}
+
+.chat__send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   background: var(--accent-primary);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   transition: all 0.15s ease;
 }
 
-.chat__submit:disabled {
+.chat__send-btn:disabled {
   background: var(--bg-elevated);
   color: var(--text-faint);
   cursor: not-allowed;
-  box-shadow: none;
 }
 
-.chat__submit:not(:disabled):hover {
+.chat__send-btn:not(:disabled):hover {
   background: #ea6c0e;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
-  transform: translateY(-1px);
+  transform: scale(1.05);
+}
+
+.chat__send-btn:not(:disabled):active {
+  transform: scale(0.95);
 }
 
 /* ╔══════════════════════════════════════════╗

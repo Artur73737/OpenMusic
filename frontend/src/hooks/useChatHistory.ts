@@ -57,13 +57,13 @@ export function useChatHistory() {
   }, []);
 
   const saveSession = useCallback(
-    (title: string, composition: Composition | null) => {
+    (title: string, composition: Composition | null, currentMessages?: ChatMessage[]) => {
       const session: Session = {
         id: generateId(),
         title,
         timestamp: Date.now(),
         composition,
-        messages: [...messages],
+        messages: currentMessages ? [...currentMessages] : [...messages],
       };
       setSessions((prev) => [session, ...prev]);
       return session.id;

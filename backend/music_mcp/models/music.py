@@ -31,6 +31,7 @@ class Instrument(StrEnum):
     ORGAN = "organ"
     PLUCK = "pluck"
     BASS_SYNTH = "bass_synth"
+    BASS = "bass"
     BELL = "bell"
 
 

@@ -34,6 +34,34 @@ _OSTINATO_CELLS: list[list[tuple[float, float]]] = [
     [(0, 0.5), (0.5, 0.5), (1, 0.5), (1.5, 0.5), (2, 0.5), (2.5, 0.5), (3, 0.5), (3.5, 0.5)],  # Driving 8ths
     [(0, 0.75), (0.75, 0.75), (1.5, 0.5), (2, 0.75), (2.75, 0.75), (3.5, 0.5)],  # Dotted rhythm
     [(0, 1), (1, 0.5), (1.5, 0.5), (2, 1), (3, 0.5), (3.5, 0.5)],  # Long-short
+    [(0, 0.25), (0.5, 0.25), (1, 0.25), (1.5, 0.25), (2, 0.25), (2.5, 0.25), (3, 0.25), (3.5, 0.25)],  # Fast 16ths
+    [(0, 0.5), (1.5, 0.5), (2.5, 0.5), (3.5, 0.5)],  # Sparse syncopated
+    [(0, 1), (2, 0.5), (3, 0.5)],  # Minimal
+    [(0, 0.5), (0.75, 0.5), (1.5, 0.5), (2.25, 0.5), (3, 0.5), (3.75, 0.5)],  # Off-beat accents
+]
+
+_MELODY_PHRASES: list[list[tuple[float, float]]] = [
+    # Lyrical phrases for main melody (longer notes)
+    [(0, 3), (3, 1)],  # Sustained + pickup
+    [(0, 2), (2, 2)],  # Two halves
+    [(0, 1.5), (1.5, 1), (2.5, 1.5)],  # Triplet feel
+    [(0, 2), (2, 1), (3, 0.5), (3.5, 0.5)],  # Long then active
+    [(0, 4)],  # Whole note hold
+    [(0, 1), (1, 1), (2, 1), (3, 1)],  # Walking quarters
+    [(0, 1.5), (1.5, 0.5), (2, 1), (3, 1)],  # Dotted quarter
+    [(0, 3), (3, 0.5), (3.5, 0.5)],  # Long hold + fill
+    [(0, 0.5), (0.5, 1.5), (2, 1.5), (3.5, 0.5)],  # Syncopated 16th feel
+    [(0, 2.5), (2.5, 1.5)],  # Long sustained
+    [(0, 1), (1.5, 0.5), (2, 1.5), (3.5, 0.5)],  # Syncopated with hold
+    [(0, 0.25), (0.75, 0.25), (1.5, 2), (3.5, 0.5)],  # Burst + hold
+]
+
+_CLIMAX_RHYTHMS: list[list[tuple[float, float]]] = [
+    [(0, 4)],  # Power whole note
+    [(0, 2), (2, 2)],  # Two power halves
+    [(0, 1.5), (2, 1.5), (3.5, 0.5)],  # Syncopated power
+    [(0, 0.5), (0.5, 0.5), (1, 0.5), (1.5, 0.5), (2, 0.5), (2.5, 0.5), (3, 0.5), (3.5, 0.5)],  # Driving climax
+    [(0, 1), (2, 2), (3, 1)],  # Alternating power
 ]
 
 _MELODY_PHRASES: list[list[tuple[float, float]]] = [

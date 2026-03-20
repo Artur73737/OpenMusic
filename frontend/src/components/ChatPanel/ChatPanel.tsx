@@ -172,31 +172,33 @@ export function ChatPanel({
         <div ref={endRef} />
       </div>
 
-      {/* Input */}
-      <div className="chat__input-area">
-        <div className="chat__input-row">
-          <textarea
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-            placeholder="Descrivi la musica..."
-            rows={2}
-            className="chat__textarea"
-          />
-      <button
-        onClick={handleSubmit}
-        disabled={isLoading || !draft.trim()}
-        className="chat__submit"
-      >
-        Genera
-      </button>
+  {/* Input */}
+      <div className="chat__input">
+        <textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+          placeholder="Descrivi la musica..."
+          rows={1}
+          className="chat__input-field"
+        />
+        <button
+          onClick={handleSubmit}
+          disabled={isLoading || !draft.trim()}
+          className="chat__send-btn"
+          aria-label="Invia"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9" />
+          </svg>
+        </button>
       </div>
     </div>
-  </div>
 );
 }
