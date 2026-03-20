@@ -849,6 +849,61 @@ button {
   flex: 1;
 }
 
+.transport__volume-slider {
+  width: 80px;
+  cursor: pointer;
+}
+
+.transport__volume-value {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  min-width: 20px;
+}
+
+.transport__export {
+  position: relative;
+}
+
+.transport__btn--export {
+  color: var(--accent-primary);
+}
+
+.transport__export-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  min-width: 80px;
+}
+
+.transport__export-item {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.transport__export-item:hover {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+}
+
 .transport__status {
   display: flex;
   align-items: center;
