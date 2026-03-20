@@ -1,43 +1,45 @@
 <p align="center">
-  <img src="logo.png" width="180" />
+  <img src="logo.png" width="160" />
 </p>
 
-<h1 align="center">OpenMusic</h1>
+<h1 align="center">OPENMUSIC</h1>
 
 <p align="center">
-  <strong>Next-Generation Algorithmic Music Studio</strong>
-</p>
-
-<p align="center">
-  Bridging AI artistic intention and deterministic musical execution.
+  <img src="https://img.shields.io/badge/Architecture-Hybrid_AI_%2F_Algorithmic-black?style=flat-square" />
+  <img src="https://img.shields.io/badge/Engine-Tone.js-black?style=flat-square" />
+  <img src="https://img.shields.io/badge/Backend-FastAPI-black?style=flat-square" />
 </p>
 
 ---
 
-### Core Philosophy
+### Intentional Sound Design
 
-The system separates the **Creative Mind** (LLM) from the **Musical Hand** (Python). The LLM determines the mood and style, while Python algorithms generate every single note using mathematical composition rules.
+`Code-driven music.` We separate high-level creative direction from technical note placement. The LLM handles the soul, the Python algorithms handle the math.
 
-<table>
-  <tr>
-    <td width="50%">
-      <h4>Cinematic Engine</h4>
-      <ul>
-        <li>Hans Zimmer Ostinato Layers</li>
-        <li>Dynamic Pedal Tones</li>
-        <li>Modal Chord Progressions</li>
-      </ul>
-    </td>
-    <td width="50%">
-      <h4>Studio Technicals</h4>
-      <ul>
-        <li>44.1kHz High-Fidelity WAV Export</li>
-        <li>Real-time Pro Audio Engine</li>
-        <li>Deterministic Note Generation</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+<div align="center">
+  <table>
+    <tr>
+      <td><b>Cinematic Scoring</b></td>
+      <td><b>Technical Engine</b></td>
+      <td><b>User Interface</b></td>
+    </tr>
+    <tr>
+      <td>Ostinato tension patterns</td>
+      <td>Deterministic note generation</td>
+      <td>Modern DAW Studio aesthetic</td>
+    </tr>
+    <tr>
+      <td>Modal modal interchange</td>
+      <td>44.1kHz WAV high-fidelity export</td>
+      <td>Interactive piano-roll editor</td>
+    </tr>
+    <tr>
+      <td>Sub-octave pedal drones</td>
+      <td>Probability-based rhythmic variance</td>
+      <td>Real-time transport controls</td>
+    </tr>
+  </table>
+</div>
 
 ---
 
@@ -49,20 +51,30 @@ The system separates the **Creative Mind** (LLM) from the **Musical Hand** (Pyth
 
 ---
 
-### Setup
+### Quick Start
+
+<details>
+<summary><b>1. Technical Backend</b></summary>
 
 ```bash
-# Backend
 cd backend
 pip install -r requirements.txt
 uvicorn music_mcp.api_server:app --port 8001
+```
+</details>
 
-# Frontend
+<details>
+<summary><b>2. Studio Frontend</b></summary>
+
+```bash
 cd frontend
 npm install
 npm run dev
 ```
+</details>
+
+---
 
 <p align="center">
-  Developed for professional algorithmic scoring.
+  <code>OPENMUSIC_CORE_V2</code>
 </p>
