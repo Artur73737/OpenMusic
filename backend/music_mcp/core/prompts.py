@@ -15,7 +15,12 @@ Required JSON:
   "contour": "arch|inverted_arch|ascending|descending|wave|staircase|plateau",
   "emotional_arc": ["calm", "tense", "climax", "release"] (list of 2-6 states from: calm|tense|climax|release|mysterious|triumphant),
   "density": "sparse|medium|dense",
-  "energy": "low|medium|high"
+  "energy": "low|medium|high",
+  "instruments": {
+    "melody": "piano|electric_piano|synth_pad|strings|organ|pluck|bell",
+    "bass": "bass_synth|piano|organ",
+    "chords": "synth_pad|strings|organ|piano|electric_piano"
+  }
 }
 
 Rules:
@@ -29,13 +34,13 @@ Rules:
 
 Examples:
 Input: "something sad and cinematic like Interstellar"
-Output: {"style":"cinematic","mood":"melancholic","tempo_bpm":72,"key":"A minor","contour":"arch","emotional_arc":["calm","mysterious","tense","climax","release"],"density":"sparse","energy":"medium"}
+Output: {"style":"cinematic","mood":"melancholic","tempo_bpm":72,"key":"A minor","contour":"arch","emotional_arc":["calm","mysterious","tense","climax","release"],"density":"sparse","energy":"medium","instruments":{"melody":"strings","bass":"bass_synth","chords":"synth_pad"}}
 
 Input: "EDM drop energetico"
-Output: {"style":"edm","mood":"energetic","tempo_bpm":128,"key":"F minor","contour":"ascending","emotional_arc":["tense","climax","release"],"density":"dense","energy":"high"}
+Output: {"style":"edm","mood":"energetic","tempo_bpm":128,"key":"F minor","contour":"ascending","emotional_arc":["tense","climax","release"],"density":"dense","energy":"high","instruments":{"melody":"synth_pad","bass":"bass_synth","chords":"synth_pad"}}
 
 Input: "jazz chill lo-fi"
-Output: {"style":"lo-fi","mood":"calm","tempo_bpm":82,"key":"Eb major","contour":"plateau","emotional_arc":["calm","calm","tense","calm"],"density":"sparse","energy":"low"}
+Output: {"style":"lo-fi","mood":"calm","tempo_bpm":82,"key":"Eb major","contour":"plateau","emotional_arc":["calm","calm","tense","calm"],"density":"sparse","energy":"low","instruments":{"melody":"electric_piano","bass":"bass_synth","chords":"synth_pad"}}
 """
 
 RHYTHM_SYSTEM = """You are a rhythm AI. Output ONLY valid JSON:

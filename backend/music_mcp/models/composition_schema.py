@@ -3,6 +3,14 @@
 from pydantic import BaseModel, Field
 
 
+class InstrumentSelection(BaseModel):
+    """Instrument selection for each channel."""
+
+    melody: str = Field(default="piano")
+    bass: str = Field(default="bass_synth")
+    chords: str = Field(default="synth_pad")
+
+
 class ChordStep(BaseModel):
     """A single chord in the progression."""
 
@@ -52,6 +60,9 @@ class GenerationSchema(BaseModel):
     bars_per_section: list[int] = Field(
         default_factory=lambda: [4, 4, 2, 4],
     )
+    instruments: InstrumentSelection = Field(
+        default_factory=InstrumentSelection,
+    )
 
 
 class LlmIntention(BaseModel):
@@ -70,3 +81,6 @@ class LlmIntention(BaseModel):
     )
     density: str = Field(default="medium")
     energy: str = Field(default="medium")
+    instruments: InstrumentSelection = Field(
+        default_factory=InstrumentSelection,
+    )

@@ -20,6 +20,7 @@ from music_mcp.models.music import (
     Adsr,
     Channel,
     ChannelRole,
+    Instrument,
     MusicScore,
     Note,
     Waveform,
@@ -30,38 +31,34 @@ from music_mcp.models.music import (
 
 _OSTINATO_CELLS: list[list[tuple[float, float]]] = [
     # (beat_offset, duration) — 1 bar patterns
-    [(0, 0.5), (0.5, 0.5), (1, 0.5), (1.5, 0.5),
-     (2, 0.5), (2.5, 0.5), (3, 0.5), (3.5, 0.5)],   # Driving 8ths
-    [(0, 0.75), (0.75, 0.75), (1.5, 0.5),
-     (2, 0.75), (2.75, 0.75), (3.5, 0.5)],            # Dotted rhythm
-    [(0, 1), (1, 0.5), (1.5, 0.5),
-     (2, 1), (3, 0.5), (3.5, 0.5)],                   # Long-short
+    [(0, 0.5), (0.5, 0.5), (1, 0.5), (1.5, 0.5), (2, 0.5), (2.5, 0.5), (3, 0.5), (3.5, 0.5)],  # Driving 8ths
+    [(0, 0.75), (0.75, 0.75), (1.5, 0.5), (2, 0.75), (2.75, 0.75), (3.5, 0.5)],  # Dotted rhythm
+    [(0, 1), (1, 0.5), (1.5, 0.5), (2, 1), (3, 0.5), (3.5, 0.5)],  # Long-short
 ]
 
 _MELODY_PHRASES: list[list[tuple[float, float]]] = [
     # Lyrical phrases for main melody (longer notes)
-    [(0, 3), (3, 1)],                                   # Sustained + pickup
-    [(0, 2), (2, 2)],                                   # Two halves
-    [(0, 1.5), (1.5, 1), (2.5, 1.5)],                  # Triplet feel
-    [(0, 2), (2, 1), (3, 0.5), (3.5, 0.5)],            # Long then active
-    [(0, 4)],                                           # Whole note hold
-    [(0, 1), (1, 1), (2, 1), (3, 1)],                  # Walking quarters
-    [(0, 1.5), (1.5, 0.5), (2, 1), (3, 1)],            # Dotted quarter
-    [(0, 3), (3, 0.5), (3.5, 0.5)],                    # Long hold + fill
+    [(0, 3), (3, 1)],  # Sustained + pickup
+    [(0, 2), (2, 2)],  # Two halves
+    [(0, 1.5), (1.5, 1), (2.5, 1.5)],  # Triplet feel
+    [(0, 2), (2, 1), (3, 0.5), (3.5, 0.5)],  # Long then active
+    [(0, 4)],  # Whole note hold
+    [(0, 1), (1, 1), (2, 1), (3, 1)],  # Walking quarters
+    [(0, 1.5), (1.5, 0.5), (2, 1), (3, 1)],  # Dotted quarter
+    [(0, 3), (3, 0.5), (3.5, 0.5)],  # Long hold + fill
 ]
 
 _CLIMAX_RHYTHMS: list[list[tuple[float, float]]] = [
-    [(0, 4)],                                           # Power whole note
-    [(0, 2), (2, 2)],                                   # Two power halves
-    [(0, 1.5), (2, 1.5), (3.5, 0.5)],                  # Syncopated power
+    [(0, 4)],  # Power whole note
+    [(0, 2), (2, 2)],  # Two power halves
+    [(0, 1.5), (2, 1.5), (3.5, 0.5)],  # Syncopated power
 ]
 
 
 # ── Section types and their behaviors ─────────────────────────
 
-def _section_config(
-    section_name: str, bar_in_section: int, total_section_bars: int
-) -> dict:
+
+def _section_config(section_name: str, bar_in_section: int, total_section_bars: int) -> dict:
     """Get generation parameters for an emotional section."""
     progress = bar_in_section / max(total_section_bars - 1, 1)
 
@@ -126,9 +123,8 @@ def _section_config(
 
 # ── Chord tone logic ──────────────────────────────────────────
 
-def _chord_tones_in_register(
-    chord_root: int, scale: list[int], reg_min: int, reg_max: int
-) -> list[int]:
+
+def _chord_tones_in_register(chord_root: int, scale: list[int], reg_min: int, reg_max: int) -> list[int]:
     """All chord tones (root, 3rd, 5th, octave) within register."""
     intervals = [0, 3, 4, 7, 12]  # Include minor/major 3rd variants
     candidates: list[int] = []
@@ -152,9 +148,7 @@ def _nearest_in_list(target: int, notes: list[int]) -> int:
     return min(notes, key=lambda n: abs(n - target))
 
 
-def _step_within_scale(
-    current: int, direction: int, scale: list[int], max_step: int = 4
-) -> int:
+def _step_within_scale(current: int, direction: int, scale: list[int], max_step: int = 4) -> int:
     """Move by scale step. Direction: 1=up, -1=down."""
     step = random.randint(1, max_step)
     raw = current + direction * step
@@ -162,6 +156,7 @@ def _step_within_scale(
 
 
 # ── Main melody ───────────────────────────────────────────────
+
 
 def _generate_melody(schema: GenerationSchema) -> list[Note]:
     """Cinematic main melody with section-aware behavior."""
@@ -194,13 +189,15 @@ def _generate_melody(schema: GenerationSchema) -> list[Note]:
                 ct = _nearest_in_list(base_target, cts)
                 current_pitch = ct
                 pitch_name, octave = midi_to_note_name(current_pitch)
-                notes.append(Note(
-                    pitch=pitch_name,
-                    octave=max(1, min(8, octave)),
-                    start_time=round(absolute_bar * 4.0, 4),
-                    duration=2.0,
-                    velocity=cfg["vel_base"],
-                ))
+                notes.append(
+                    Note(
+                        pitch=pitch_name,
+                        octave=max(2, min(8, octave)),
+                        start_time=round(absolute_bar * 4.0, 4),
+                        duration=2.0,
+                        velocity=cfg["vel_base"],
+                    )
+                )
                 absolute_bar += 1
                 continue
 
@@ -235,9 +232,7 @@ def _generate_melody(schema: GenerationSchema) -> list[Note]:
                         current_pitch = target_ct
                 else:
                     direction = 1 if base_target > current_pitch else -1
-                    current_pitch = _step_within_scale(
-                        current_pitch, direction, scale, 3
-                    )
+                    current_pitch = _step_within_scale(current_pitch, direction, scale, 3)
 
                 # Force phrase endings
                 total_bars = sum(schema.bars_per_section)
@@ -250,21 +245,21 @@ def _generate_melody(schema: GenerationSchema) -> list[Note]:
                 current_pitch = max(reg_min, min(reg_max, current_pitch))
 
                 # Velocity
-                vel = cfg["vel_base"] + random.randint(
-                    -cfg["vel_range"] // 3, cfg["vel_range"] // 3
-                )
+                vel = cfg["vel_base"] + random.randint(-cfg["vel_range"] // 3, cfg["vel_range"] // 3)
                 if is_strong:
                     vel += 6
                 vel = max(25, min(127, vel))
 
                 pitch_name, octave = midi_to_note_name(current_pitch)
-                notes.append(Note(
-                    pitch=pitch_name,
-                    octave=max(1, min(8, octave)),
-                    start_time=round(abs_beat, 4),
-                    duration=round(max(0.15, dur), 4),
-                    velocity=vel,
-                ))
+                notes.append(
+                    Note(
+                        pitch=pitch_name,
+                        octave=max(2, min(8, octave)),
+                        start_time=round(abs_beat, 4),
+                        duration=round(max(0.15, dur), 4),
+                        velocity=vel,
+                    )
+                )
 
             absolute_bar += 1
 
@@ -272,6 +267,7 @@ def _generate_melody(schema: GenerationSchema) -> list[Note]:
 
 
 # ── Ostinato layer (Zimmer signature) ─────────────────────────
+
 
 def _generate_ostinato(schema: GenerationSchema) -> list[Note]:
     """Pulsing rhythmic cell that drives tension. Zimmer's trademark."""
@@ -309,13 +305,15 @@ def _generate_ostinato(schema: GenerationSchema) -> list[Note]:
                 pitch = root if int(beat_off * 2) % 2 == 0 else fifth
 
                 pitch_name, octave = midi_to_note_name(pitch)
-                notes.append(Note(
-                    pitch=pitch_name,
-                    octave=max(2, min(6, octave)),
-                    start_time=round(abs_beat, 4),
-                    duration=round(max(0.1, dur * 0.8), 4),
-                    velocity=max(20, min(100, vel_base + random.randint(-5, 5))),
-                ))
+                notes.append(
+                    Note(
+                        pitch=pitch_name,
+                        octave=max(2, min(6, octave)),
+                        start_time=round(abs_beat, 4),
+                        duration=round(max(0.1, dur * 0.8), 4),
+                        velocity=max(20, min(100, vel_base + random.randint(-5, 5))),
+                    )
+                )
 
             absolute_bar += 1
 
@@ -323,6 +321,7 @@ def _generate_ostinato(schema: GenerationSchema) -> list[Note]:
 
 
 # ── Bass with pedal tone technique ────────────────────────────
+
 
 def _generate_bass(schema: GenerationSchema) -> list[Note]:
     """Bass: pedal tones + chord roots. Zimmer uses sustained low drones."""
@@ -357,26 +356,30 @@ def _generate_bass(schema: GenerationSchema) -> list[Note]:
 
             # Long sustained bass
             pitch_name, octave = midi_to_note_name(bass_note)
-            notes.append(Note(
-                pitch=pitch_name,
-                octave=max(1, min(4, octave)),
-                start_time=round(absolute_bar * 4.0, 4),
-                duration=3.5,
-                velocity=max(40, min(110, vel)),
-            ))
+            notes.append(
+                Note(
+                    pitch=pitch_name,
+                    octave=max(2, min(4, octave)),
+                    start_time=round(absolute_bar * 4.0, 4),
+                    duration=3.5,
+                    velocity=max(40, min(110, vel)),
+                )
+            )
 
             # Sub-octave doubling for climax
             if section in ("climax", "triumphant"):
                 sub = bass_note - 12
                 if sub >= 28:
                     pn2, oc2 = midi_to_note_name(sub)
-                    notes.append(Note(
-                        pitch=pn2,
-                        octave=max(1, min(3, oc2)),
-                        start_time=round(absolute_bar * 4.0, 4),
-                        duration=3.5,
-                        velocity=max(35, min(90, vel - 10)),
-                    ))
+                    notes.append(
+                        Note(
+                            pitch=pn2,
+                            octave=max(2, min(3, oc2)),
+                            start_time=round(absolute_bar * 4.0, 4),
+                            duration=3.5,
+                            velocity=max(35, min(90, vel - 10)),
+                        )
+                    )
 
             absolute_bar += 1
 
@@ -384,6 +387,7 @@ def _generate_bass(schema: GenerationSchema) -> list[Note]:
 
 
 # ── Chords with voicing and movement ──────────────────────────
+
 
 def _generate_chords(schema: GenerationSchema) -> list[Note]:
     """Pad chords: triads with inversions and movement."""
@@ -424,13 +428,15 @@ def _generate_chords(schema: GenerationSchema) -> list[Note]:
             for midi in voicing:
                 midi = max(48, min(96, midi))
                 pitch_name, octave = midi_to_note_name(midi)
-                notes.append(Note(
-                    pitch=pitch_name,
-                    octave=max(3, min(7, octave)),
-                    start_time=round(absolute_bar * 4.0, 4),
-                    duration=dur,
-                    velocity=max(20, min(85, vel + random.randint(-3, 3))),
-                ))
+                notes.append(
+                    Note(
+                        pitch=pitch_name,
+                        octave=max(3, min(7, octave)),
+                        start_time=round(absolute_bar * 4.0, 4),
+                        duration=dur,
+                        velocity=max(20, min(85, vel + random.randint(-3, 3))),
+                    )
+                )
 
             absolute_bar += 1
 
@@ -438,6 +444,7 @@ def _generate_chords(schema: GenerationSchema) -> list[Note]:
 
 
 # ── Chord map builder ─────────────────────────────────────────
+
 
 def _get_chord_at_bar(schema: GenerationSchema, bar: int) -> int:
     """Get the chord root MIDI for a given bar."""
@@ -460,6 +467,7 @@ def _get_chord_at_bar(schema: GenerationSchema, bar: int) -> int:
 
 # ── Assemble score ────────────────────────────────────────────
 
+
 def generate_from_schema(schema: GenerationSchema) -> MusicScore:
     """Generate cinematic MusicScore. Zero LLM, pure algorithms."""
     melody_notes = _generate_melody(schema)
@@ -468,6 +476,7 @@ def generate_from_schema(schema: GenerationSchema) -> MusicScore:
     chord_notes = _generate_chords(schema)
 
     from music_mcp.core.scales import NOTE_NAMES
+
     root_name = NOTE_NAMES[schema.key_root_midi % 12]
     mode = _detect_mode(schema.scale_intervals)
     key_str = f"{root_name} {mode}"
@@ -476,10 +485,7 @@ def generate_from_schema(schema: GenerationSchema) -> MusicScore:
     title = f"{mood.capitalize()} {mode} in {root_name}"
 
     # Merge ostinato into melody channel (or make 4th channel)
-    melody_combined = sorted(
-        melody_notes + ostinato_notes,
-        key=lambda n: n.start_time
-    )
+    melody_combined = sorted(melody_notes + ostinato_notes, key=lambda n: n.start_time)
 
     return MusicScore(
         title=title,
@@ -491,6 +497,7 @@ def generate_from_schema(schema: GenerationSchema) -> MusicScore:
                 id=ChannelRole.MELODY,
                 name="Melody",
                 waveform=Waveform.TRIANGLE,
+                instrument=Instrument(schema.instruments.melody),
                 adsr=Adsr(attack=0.02, decay=0.4, sustain=0.3, release=0.8),
                 notes=melody_combined or [_fallback(schema)],
             ),
@@ -498,6 +505,7 @@ def generate_from_schema(schema: GenerationSchema) -> MusicScore:
                 id=ChannelRole.BASS,
                 name="Bass",
                 waveform=Waveform.SAWTOOTH,
+                instrument=Instrument(schema.instruments.bass),
                 adsr=Adsr(attack=0.03, decay=0.3, sustain=0.6, release=0.8),
                 notes=bass_notes or [_fallback(schema)],
             ),
@@ -505,6 +513,7 @@ def generate_from_schema(schema: GenerationSchema) -> MusicScore:
                 id=ChannelRole.CHORDS,
                 name="Chords",
                 waveform=Waveform.SINE,
+                instrument=Instrument(schema.instruments.chords),
                 adsr=Adsr(attack=0.1, decay=0.4, sustain=0.6, release=1.5),
                 notes=chord_notes or [_fallback(schema)],
             ),
@@ -515,6 +524,7 @@ def generate_from_schema(schema: GenerationSchema) -> MusicScore:
 def _detect_mode(intervals: list[int]) -> str:
     """Detect scale mode from intervals."""
     from music_mcp.core.scales import SCALE_INTERVALS
+
     for name, scale_ints in SCALE_INTERVALS.items():
         if intervals == list(scale_ints):
             return name
@@ -525,6 +535,9 @@ def _fallback(schema: GenerationSchema) -> Note:
     """Fallback note."""
     pitch_name, octave = midi_to_note_name(schema.key_root_midi)
     return Note(
-        pitch=pitch_name, octave=octave,
-        start_time=0.0, duration=2.0, velocity=60,
+        pitch=pitch_name,
+        octave=octave,
+        start_time=0.0,
+        duration=2.0,
+        velocity=60,
     )

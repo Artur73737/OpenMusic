@@ -23,6 +23,17 @@ class ChannelRole(StrEnum):
     CHORDS = "chords"
 
 
+class Instrument(StrEnum):
+    PIANO = "piano"
+    ELECTRIC_PIANO = "electric_piano"
+    SYNTH_PAD = "synth_pad"
+    STRINGS = "strings"
+    ORGAN = "organ"
+    PLUCK = "pluck"
+    BASS_SYNTH = "bass_synth"
+    BELL = "bell"
+
+
 class Adsr(BaseModel):
     attack: float = Field(ge=0.001)
     decay: float = Field(ge=0.001)
@@ -50,6 +61,7 @@ class Channel(BaseModel):
     id: ChannelRole
     name: str
     waveform: Waveform
+    instrument: Instrument
     adsr: Adsr
     notes: list[Note] = Field(min_length=1)
 

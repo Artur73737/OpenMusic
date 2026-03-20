@@ -281,12 +281,10 @@ export function useAudioEngine() {
 
       const beatDuration = 60 / bpm;
 
-      channels.forEach((channel) => {
-        const presetName =
-          ROLE_TO_PRESET[channel.id] ||
-          currentPresetRef.current;
+    channels.forEach((channel) => {
+      const presetName = channel.instrument as InstrumentPreset;
 
-        const synth = createSynth(presetName);
+      const synth = createSynth(presetName);
         synth.connect(fx.compressor);
         channelSynthsRef.current.set(
           channel.id,
@@ -497,17 +495,10 @@ export function useAudioEngine() {
           filter.connect(limiter);
           compressor.connect(filter);
 
-          channels.forEach((channel) => {
-            const preset =
-              (
-                {
-                  melody: "piano",
-                  bass: "bass_synth",
-                  chords: "synth_pad",
-                } as Record<string, InstrumentPreset>
-              )[channel.id] || "piano";
+      channels.forEach((channel) => {
+        const preset = channel.instrument as InstrumentPreset;
 
-            const synth = createSynth(preset);
+        const synth = createSynth(preset);
             synth.connect(compressor);
 
             channel.notes.forEach((note) => {

@@ -2,6 +2,15 @@ export type Waveform = "sine" | "triangle" | "square" | "sawtooth";
 export type TimeSignature = "4/4" | "3/4" | "6/8";
 export type ChannelRole = "melody" | "bass" | "chords";
 export type BeatType = "bass" | "chord" | "melody" | "rest";
+export type Instrument =
+  | "piano"
+  | "electric_piano"
+  | "synth_pad"
+  | "strings"
+  | "organ"
+  | "pluck"
+  | "bass_synth"
+  | "bell";
 
 export interface Adsr {
   attack: number;
@@ -22,6 +31,7 @@ export interface Channel {
   id: ChannelRole;
   name: string;
   waveform: Waveform;
+  instrument: Instrument;
   adsr: Adsr;
   notes: Note[];
 }

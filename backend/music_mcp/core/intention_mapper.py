@@ -4,6 +4,7 @@ from music_mcp.core.scales import ROOT_NAME_TO_SEMITONE, SCALE_INTERVALS
 from music_mcp.models.composition_schema import (
     ChordStep,
     GenerationSchema,
+    InstrumentSelection,
     LlmIntention,
 )
 
@@ -43,52 +44,112 @@ def _parse_key(key_str: str) -> tuple[int, list[int]]:
 _CHORD_TEMPLATES: dict[str, list[tuple[int, int]]] = {
     # Zimmer-style: modal, dramatic, unexpected resolutions
     "zimmer_dark": [
-        (0, 4), (3, 4), (7, 4), (5, 4),           # i - III - v - iv
-        (0, 4), (8, 4), (3, 4), (7, 4),            # i - VI - III - v
+        (0, 4),
+        (3, 4),
+        (7, 4),
+        (5, 4),  # i - III - v - iv
+        (0, 4),
+        (8, 4),
+        (3, 4),
+        (7, 4),  # i - VI - III - v
     ],
     "zimmer_epic": [
-        (0, 4), (7, 4), (3, 4), (5, 4),            # i - v - III - iv
-        (0, 4), (5, 4), (3, 8),                     # i - iv - III (long)
+        (0, 4),
+        (7, 4),
+        (3, 4),
+        (5, 4),  # i - v - III - iv
+        (0, 4),
+        (5, 4),
+        (3, 8),  # i - iv - III (long)
     ],
     "zimmer_hope": [
-        (0, 4), (5, 4), (7, 4), (0, 4),            # i - iv - v - i
-        (3, 4), (5, 4), (0, 8),                     # III - iv - i (resolve)
+        (0, 4),
+        (5, 4),
+        (7, 4),
+        (0, 4),  # i - iv - v - i
+        (3, 4),
+        (5, 4),
+        (0, 8),  # III - iv - i (resolve)
     ],
     "interstellar": [
-        (0, 8), (5, 8),                              # i ---- iv ----
-        (3, 8), (7, 8),                              # III --- v ----
+        (0, 8),
+        (5, 8),  # i ---- iv ----
+        (3, 8),
+        (7, 8),  # III --- v ----
     ],
     "inception": [
-        (0, 4), (0, 4), (5, 4), (5, 4),            # i - i - iv - iv
-        (3, 4), (3, 4), (7, 4), (0, 4),            # III - III - v - i
+        (0, 4),
+        (0, 4),
+        (5, 4),
+        (5, 4),  # i - i - iv - iv
+        (3, 4),
+        (3, 4),
+        (7, 4),
+        (0, 4),  # III - III - v - i
     ],
     "dunkirk": [
-        (0, 2), (0, 2), (0, 2), (0, 2),            # Obsessive tonic
-        (5, 2), (5, 2), (7, 2), (0, 2),            # iv iv v i
+        (0, 2),
+        (0, 2),
+        (0, 2),
+        (0, 2),  # Obsessive tonic
+        (5, 2),
+        (5, 2),
+        (7, 2),
+        (0, 2),  # iv iv v i
     ],
     "major_heroic": [
-        (0, 4), (5, 4), (7, 4), (0, 4),            # I - IV - V - I
-        (9, 4), (5, 4), (7, 4), (0, 4),            # vi - IV - V - I
+        (0, 4),
+        (5, 4),
+        (7, 4),
+        (0, 4),  # I - IV - V - I
+        (9, 4),
+        (5, 4),
+        (7, 4),
+        (0, 4),  # vi - IV - V - I
     ],
     "major_emotional": [
-        (0, 4), (9, 4), (5, 4), (7, 4),            # I - vi - IV - V
-        (0, 4), (5, 4), (9, 4), (7, 4),            # I - IV - vi - V
+        (0, 4),
+        (9, 4),
+        (5, 4),
+        (7, 4),  # I - vi - IV - V
+        (0, 4),
+        (5, 4),
+        (9, 4),
+        (7, 4),  # I - IV - vi - V
     ],
     "sad_cinematic": [
-        (0, 8), (3, 4), (5, 4),                     # i ---- III - iv
-        (8, 4), (7, 4), (0, 8),                     # VI - v - i ----
+        (0, 8),
+        (3, 4),
+        (5, 4),  # i ---- III - iv
+        (8, 4),
+        (7, 4),
+        (0, 8),  # VI - v - i ----
     ],
     "jazz_modal": [
-        (0, 4), (2, 4), (5, 4), (0, 4),            # i - ii - iv - i
-        (7, 4), (5, 4), (3, 4), (0, 4),            # v - iv - III - i
+        (0, 4),
+        (2, 4),
+        (5, 4),
+        (0, 4),  # i - ii - iv - i
+        (7, 4),
+        (5, 4),
+        (3, 4),
+        (0, 4),  # v - iv - III - i
     ],
     "edm_power": [
-        (0, 4), (0, 4), (5, 4), (7, 4),            # i - i - iv - v
-        (0, 4), (3, 4), (5, 4), (7, 4),            # i - III - iv - v
+        (0, 4),
+        (0, 4),
+        (5, 4),
+        (7, 4),  # i - i - iv - v
+        (0, 4),
+        (3, 4),
+        (5, 4),
+        (7, 4),  # i - III - iv - v
     ],
     "ambient": [
-        (0, 8), (5, 8),                              # i ---- iv ----
-        (0, 8), (7, 8),                              # i ---- v ----
+        (0, 8),
+        (5, 8),  # i ---- iv ----
+        (0, 8),
+        (7, 8),  # i ---- v ----
     ],
 }
 
@@ -172,8 +233,10 @@ def intention_to_schema(intention: LlmIntention) -> GenerationSchema:
     root_midi, scale_intervals = _parse_key(intention.key)
 
     chords = _build_chords(
-        root_midi, scale_intervals,
-        intention.style, intention.mood,
+        root_midi,
+        scale_intervals,
+        intention.style,
+        intention.mood,
     )
 
     energy = _ENERGY_MAP.get(intention.energy.lower(), _ENERGY_MAP["medium"])
@@ -194,10 +257,7 @@ def intention_to_schema(intention: LlmIntention) -> GenerationSchema:
     reg_max = min(96, root_midi + 24)
 
     # Bars per section based on section type
-    bars_per = [
-        _SECTION_BARS.get(s, 4)
-        for s in intention.emotional_arc
-    ]
+    bars_per = [_SECTION_BARS.get(s, 4) for s in intention.emotional_arc]
 
     return GenerationSchema(
         tempo_bpm=intention.tempo_bpm,
