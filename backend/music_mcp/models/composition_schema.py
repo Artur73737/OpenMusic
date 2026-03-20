@@ -63,6 +63,7 @@ class GenerationSchema(BaseModel):
     instruments: InstrumentSelection = Field(
         default_factory=InstrumentSelection,
     )
+    seed: int | None = Field(default=None)
 
 
 class LlmIntention(BaseModel):

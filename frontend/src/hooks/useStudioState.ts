@@ -58,22 +58,23 @@ export function useStudioState() {
         duration_seconds: config.durationSeconds,
         bpm: config.bpm,
       });
-      if (result) {
-        const totalNotes = result.melody.channels.reduce(
-          (sum, ch) => sum + ch.notes.length,
-          0
-        );
-        chatHistory.addAssistantMessage(
-          `Generato: "${result.melody.title}" ` +
-            `in ${result.melody.key} ` +
-            `a ${result.melody.bpm} BPM ` +
-            `(${totalNotes} note, ${config.durationSeconds}s)`
-        );
-        chatHistory.saveSession(
-          result.melody.title,
-          result
-        );
-      }
+    if (result) {
+      const totalNotes = result.melody.channels.reduce(
+        (sum, ch) => sum + ch.notes.length,
+        0
+      );
+      chatHistory.addAssistantMessage(
+        `Generato: "${result.melody.title}" ` +
+          `in ${result.melody.key} ` +
+          `a ${result.melody.bpm} BPM ` +
+          `(${totalNotes} note, ${config.durationSeconds}s)`,
+        result
+      );
+      chatHistory.saveSession(
+        result.melody.title,
+        result
+      );
+    }
     },
     [
       composition.generate,

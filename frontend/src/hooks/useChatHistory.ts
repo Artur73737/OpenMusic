@@ -38,15 +38,19 @@ export function useChatHistory() {
     setMessages((prev) => [...prev, message]);
   }, []);
 
-  const addAssistantMessage = useCallback((content: string) => {
-    const message: ChatMessage = {
-      id: generateId(),
-      role: "assistant",
-      content,
-      timestamp: Date.now(),
-    };
-    setMessages((prev) => [...prev, message]);
-  }, []);
+  const addAssistantMessage = useCallback(
+    (content: string, composition?: Composition) => {
+      const message: ChatMessage = {
+        id: generateId(),
+        role: "assistant",
+        content,
+        timestamp: Date.now(),
+        composition,
+      };
+      setMessages((prev) => [...prev, message]);
+    },
+    []
+  );
 
   const clearHistory = useCallback(() => {
     setMessages([]);

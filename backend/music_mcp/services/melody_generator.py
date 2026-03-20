@@ -470,6 +470,14 @@ def _get_chord_at_bar(schema: GenerationSchema, bar: int) -> int:
 
 def generate_from_schema(schema: GenerationSchema) -> MusicScore:
     """Generate cinematic MusicScore. Zero LLM, pure algorithms."""
+    # Seed random for reproducibility or variation
+    if schema.seed is not None:
+        random.seed(schema.seed)
+    else:
+        import time
+
+        random.seed(int(time.time() * 1000))
+
     melody_notes = _generate_melody(schema)
     ostinato_notes = _generate_ostinato(schema)
     bass_notes = _generate_bass(schema)

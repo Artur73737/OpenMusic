@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { Composition } from "@/types/music";
 import { ChatPanelProps } from "./ChatPanel.types";
 
 function formatSessionDate(timestamp: number): string {
@@ -22,9 +23,28 @@ function formatSessionDate(timestamp: number): string {
   });
 }
 
+function downloadCompositionJson(
+  composition: Composition | null | undefined
+): void {
+  if (!composition) return;
+
+  const data = JSON.stringify(composition, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const timestamp = new Date().toISOString().split("T")[0];
+  a.download = `composition_${composition.melody.title.replace(/\s+/g, "_")}_${timestamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 export function ChatPanel({
   messages,
   sessions,
+  composition,
   isLoading,
   onSubmit,
   onLoadSession,
@@ -111,14 +131,36 @@ export function ChatPanel({
           </div>
         )}
 
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`chat__bubble chat__bubble--${msg.role}`}
-          >
+      {messages.map((msg) => (
+        <div
+          key={msg.id}
+          className={`chat__bubble chat__bubble--${msg.role}`}
+        >
+          <span className="chat__bubble-content">
             {msg.content}
-          </div>
-        ))}
+          </span>
+          {msg.role === "assistant" && msg.composition && (
+            <button
+              onClick={() => downloadCompositionJson(msg.composition)}
+              className="chat__download-btn"
+              title="Scarica JSON"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </button>
+          )}
+        </div>
+      ))}
 
         {isLoading && (
           <div className="chat__loading-dots">
@@ -146,15 +188,15 @@ export function ChatPanel({
             rows={2}
             className="chat__textarea"
           />
-          <button
-            onClick={handleSubmit}
-            disabled={isLoading || !draft.trim()}
-            className="chat__submit"
-          >
-            Genera
-          </button>
-        </div>
+      <button
+        onClick={handleSubmit}
+        disabled={isLoading || !draft.trim()}
+        className="chat__submit"
+      >
+        Genera
+      </button>
       </div>
     </div>
-  );
+  </div>
+);
 }

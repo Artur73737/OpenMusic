@@ -52,9 +52,7 @@ class CompositionService:
         ]
 
         try:
-            response = await self._client.chat(
-                messages, model=model, max_tokens=512
-            )
+            response = await self._client.chat(messages, model=model, max_tokens=512)
             data = parse_model_json(response)
             intention = LlmIntention.model_validate(data)
             logger.info(
@@ -78,6 +76,7 @@ class CompositionService:
         model: str | None = None,
         duration_seconds: int | None = None,
         bpm: int | None = None,
+        seed: int | None = None,
     ) -> MusicScore:
         """LLM -> intention -> schema -> algorithmic notes."""
         intention = await self._get_intention(prompt, model)
@@ -88,6 +87,9 @@ class CompositionService:
         # Map intention to deterministic schema
         schema = intention_to_schema(intention)
 
+        # Add seed for variation
+        schema.seed = seed
+
         # Override duration if specified
         if duration_seconds and duration_seconds > 0:
             bars = max(
@@ -95,9 +97,7 @@ class CompositionService:
                 int((duration_seconds / 60) * schema.tempo_bpm / 4),
             )
             num_sections = len(schema.emotional_arc)
-            schema.bars_per_section = _distribute_bars(
-                bars, num_sections
-            )
+            schema.bars_per_section = _distribute_bars(bars, num_sections)
 
         logger.info(
             "schema_built",
@@ -114,9 +114,7 @@ class CompositionService:
             "melody_generated",
             title=score.title,
             channels=len(score.channels),
-            total_notes=sum(
-                len(ch.notes) for ch in score.channels
-            ),
+            total_notes=sum(len(ch.notes) for ch in score.channels),
         )
         return score
 
@@ -126,19 +124,14 @@ class CompositionService:
         model: str | None = None,
         duration_seconds: int | None = None,
         bpm: int | None = None,
+        seed: int | None = None,
     ) -> Composition:
         """Full composition: melody + auto rhythm."""
-        melody = await self.generate_melody(
-            prompt, model, duration_seconds, bpm
-        )
+        melody = await self.generate_melody(prompt, model, duration_seconds, bpm, seed)
 
         effective_bpm = bpm or melody.bpm
         total_beats = max(
-            (
-                n.start_time + n.duration
-                for ch in melody.channels
-                for n in ch.notes
-            ),
+            (n.start_time + n.duration for ch in melody.channels for n in ch.notes),
             default=16,
         )
         bars = max(1, int(total_beats / 4))

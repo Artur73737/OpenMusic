@@ -35,18 +35,19 @@ export default function StudioPage() {
 
       <div className="studio__body">
         <Sidebar activeTab={tab} onTabChange={setTab}>
-          {tab === "chat" && (
-            <ChatPanel
-              messages={studio.messages}
-              sessions={studio.sessions}
-              isLoading={studio.isLoading}
-              onSubmit={studio.handleSubmit}
-              onLoadSession={
-                studio.handleLoadSession
-              }
-              onDeleteSession={studio.deleteSession}
-            />
-          )}
+        {tab === "chat" && (
+          <ChatPanel
+            messages={studio.messages}
+            sessions={studio.sessions}
+            composition={studio.composition}
+            isLoading={studio.isLoading}
+            onSubmit={studio.handleSubmit}
+            onLoadSession={
+              studio.handleLoadSession
+            }
+            onDeleteSession={studio.deleteSession}
+          />
+        )}
 
           {tab === "config" && (
             <GlobalConfig

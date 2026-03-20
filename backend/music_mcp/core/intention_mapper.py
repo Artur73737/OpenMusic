@@ -276,4 +276,5 @@ def intention_to_schema(intention: LlmIntention) -> GenerationSchema:
         velocity_range=(int(energy["vel_min"]), int(energy["vel_max"])),
         emotional_arc=intention.emotional_arc,
         bars_per_section=bars_per,
+        instruments=intention.instruments,
     )
