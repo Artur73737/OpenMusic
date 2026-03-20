@@ -133,13 +133,15 @@ export default function StudioPage() {
             elapsed={studio.elapsed}
             bpm={studio.config.bpm}
             currentPreset={studio.currentPreset}
+            masterVolume={studio.masterVolume}
+            hasComposition={!!studio.composition}
             onPlay={studio.handlePlay}
             onStop={studio.stop}
             onRewind={studio.rewind}
             onBpmChange={studio.handleBpmChange}
-            onPresetChange={
-              studio.handlePresetChange
-            }
+            onPresetChange={studio.handlePresetChange}
+            onVolumeChange={studio.handleVolumeChange}
+            onExport={studio.handleExport}
           />
         </main>
       </div>

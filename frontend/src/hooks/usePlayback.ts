@@ -22,6 +22,8 @@ export function usePlayback() {
     stopKeyNote,
     setPreset,
     currentPreset,
+    setMasterVolume,
+    exportAudio,
   } = useAudioEngine();
 
   const play = useCallback(
