@@ -24,28 +24,28 @@
 OpenMusic separates high-level creative direction from technical note placement. The LLM handles the artistic intention, while deterministic Python algorithms generate every note using mathematical composition rules.
 
 <div align="center">
-  <table>
-    <tr>
-      <td><b>Cinematic Scoring</b></td>
-      <td><b>Technical Engine</b></td>
-      <td><b>User Interface</b></td>
-    </tr>
-    <tr>
-      <td>Hans Zimmer style Ostinato</td>
-      <td>Deterministic note generation</td>
-      <td>Modern DAW Studio aesthetic</td>
-    </tr>
-    <tr>
-      <td>Dynamic Pedal Tones</td>
-      <td>44.1kHz WAV high-fidelity export</td>
-      <td>Interactive piano-roll editor</td>
-    </tr>
-    <tr>
-      <td>Modal modal interchange</td>
-      <td>Probability-based rhythmic variance</td>
-      <td>Real-time transport controls</td>
-    </tr>
-  </table>
+<table>
+<tr>
+<td><b>Cinematic Scoring</b></td>
+<td><b>Technical Engine</b></td>
+<td><b>User Interface</b></td>
+</tr>
+<tr>
+<td>Hans Zimmer style Ostinato</td>
+<td>Deterministic note generation</td>
+<td>Modern DAW Studio aesthetic</td>
+</tr>
+<tr>
+<td>Dynamic Pedal Tones</td>
+<td>44.1kHz WAV high-fidelity export</td>
+<td>Interactive piano-roll editor</td>
+</tr>
+<tr>
+<td>Modal modal interchange</td>
+<td>Probability-based rhythmic variance</td>
+<td>Real-time transport controls</td>
+</tr>
+</table>
 </div>
 
 ---
@@ -55,6 +55,22 @@ OpenMusic separates high-level creative direction from technical note placement.
 <p align="center">
   <img src="app.png" width="100%" />
 </p>
+
+---
+
+### Sonic Architecture
+
+<div align="center">
+
+| Feature | Implementation |
+|---------|---------------|
+| **8 Instrument Presets** | Piano, E.Piano, Synth Pad, Strings, Organ, Pluck, Bass, Bell |
+| **3 Polyphonic Channels** | Melody, Bass, Chords with independent ADSR |
+| **Live Preview** | Web Audio API with Tone.js synthesis |
+| **AI Generation** | NVIDIA LLM + Algorithmic composition |
+| **Export** | WAV 44.1kHz stereo with effects chain |
+
+</div>
 
 ---
 
@@ -84,4 +100,14 @@ npm run dev
 
 <p align="center">
   <code>OPENMUSIC_CORE_V2</code>
+</p>
+
+<p align="center">
+  <a href="https://github.com/tuo-username/openmusic">GitHub</a> -
+  <a href="./docs/architecture.md">Architecture</a> -
+  <a href="./CHANGELOG.md">Changelog</a>
+</p>
+
+<p align="center">
+  <sub>Built with passion for algorithmic music composition</sub>
 </p>
